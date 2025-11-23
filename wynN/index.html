@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wynn Oasis | 永利绿洲</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            color: white;
+            background-color: #000;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 400;
+            letter-spacing: 1px;
+        }
+
+        /* --- 导航栏 --- */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 25px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
+        }
+        .logo { font-size: 1.5rem; text-transform: uppercase; font-family: 'Cormorant Garamond', serif; letter-spacing: 2px; color: #fff; }
+        .nav-links span { margin-left: 30px; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; transition: 0.3s; }
+        .nav-links span:hover { color: #D4AF37; }
+
+        /* --- 通用全屏板块 --- */
+        .section {
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
+            background-position: center;
+            background-size: cover;
+            background-attachment: fixed; /* 视差滚动核心 */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        /* 遮罩层：保证文字清晰 */
+        .overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.25);
+            z-index: 1;
+        }
+        .overlay-dark { background: rgba(0,0,0,0.6); }
+
+        .content {
+            position: relative;
+            z-index: 3;
+            max-width: 900px;
+            padding: 40px 20px;
+            animation: fadeIn Up 1s ease-out;
+        }
+
+        /* 按钮样式 */
+        .btn-outline {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 12px 40px;
+            border: 1px solid rgba(255,255,255,0.6);
+            color: white;
+            text-transform: uppercase;
+            text-decoration: none;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            transition: 0.3s;
+            background: rgba(0,0,0,0.2);
+            backdrop-filter: blur(5px);
+        }
+        .btn-outline:hover { background: #D4AF37; border-color: #D4AF37; color: black; }
+
+        /* --- 1. Hero Section (Video) --- */
+        #hero video {
+            position: absolute;
+            top: 50%; left: 50%;
+            min-width: 100%; min-height: 100%;
+            width: auto; height: auto;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            object-fit: cover;
+        }
+
+        /* --- 2. Outer Circle (原图1) --- */
+        #outer {
+            background-image: url('4d78a3f7fb7fd71d9180eac6743a6c43.png'); 
+        }
+
+        /* --- 3. Art Exhibition (双图拼接) --- */
+        #art-section {
+            display: flex;
+            flex-direction: row;
+            min-height: 100vh;
+            background: #111;
+            position: relative;
+        }
+        .art-img-box {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+        .art-img-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s;
+        }
+        .art-img-box:hover img { transform: scale(1.05); }
+        
+        /* 艺术展文字浮层 */
+        .art-overlay-text {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+            background: rgba(255,255,255,0.9);
+            color: #1a1a1a;
+            padding: 50px;
+            text-align: center;
+            max-width: 500px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+        }
+
+        /* --- 4. Events (What's On) --- */
+        .events-bg {
+            background: #1a1a1a;
+            padding: 100px 0;
+            text-align: center;
+        }
+        .events-scroller {
+            display: flex;
+            gap: 30px;
+            overflow-x: auto;
+            padding: 40px 50px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .event-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 30px;
+            width: 300px;
+            text-align: left;
+            transition: 0.3s;
+        }
+        .event-card:hover { background: rgba(255,255,255,0.1); transform: translateY(-10px); }
+
+        /* --- 5. Inner Circle (夜景) --- */
+        #inner {
+            background-image: url('14fe706c7ace4918534f4799555aa261.png');
+        }
+
+        /* --- 6. Dining --- */
+        #dining {
+            background-image: url('dbd264890d222198b11c5bb7ccac5970.jpg');
+        }
+        .menu-glass {
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(20px);
+            padding: 50px;
+            border: 1px solid rgba(255,255,255,0.2);
+            text-align: left;
+            width: 100%;
+            max-width: 600px;
+        }
+        .price-highlight { color: #D4AF37; font-family: 'Cormorant Garamond'; font-size: 1.2rem; float: right; }
+
+        /* --- 7. Privileges --- */
+        .privilege-section {
+            background: #111;
+            padding: 100px 20px;
+            text-align: center;
+        }
+        .coupon-container { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; margin-top: 50px; }
+        .coupon {
+            width: 350px; height: 180px;
+            display: flex;
+            background: #D4AF37; color: #000;
+            position: relative;
+            /* 票券缺口效果 */
+            mask-image: radial-gradient(circle at 0 90px, transparent 15px, black 16px), radial-gradient(circle at 350px 90px, transparent 15px, black 16px);
+            -webkit-mask-image: radial-gradient(circle at 0 90px, transparent 15px, black 16px), radial-gradient(circle at 350px 90px, transparent 15px, black 16px);
+        }
+        .c-left { flex: 2; padding: 20px; display: flex; flex-direction: column; justify-content: center; border-right: 2px dashed rgba(0,0,0,0.2); }
+        .c-right { flex: 1; display: flex; align-items: center; justify-content: center; writing-mode: vertical-rl; font-weight: bold; letter-spacing: 2px; background: rgba(0,0,0,0.05); cursor: pointer; }
+
+        /* --- 8. Footer / Social / Map --- */
+        #footer-bg {
+            background-image: url('f0dcf0558be4cfabd5b1cd7c82ce3f6f.jpg'); /* 拱门图 */
+            padding: 120px 20px 60px;
+        }
+        .social-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            max-width: 1000px;
+            margin: 40px auto;
+        }
+        .s-img { height: 200px; background: #333; position: relative; overflow: hidden; }
+        .s-img img { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; transition: 0.3s; }
+        .s-img:hover img { opacity: 1; transform: scale(1.1); }
+
+        .map-box {
+            background: #fff; color: #000;
+            max-width: 700px; margin: 80px auto 0;
+            padding: 50px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+        }
+
+        @media (max-width: 768px) {
+            #art-section { flex-direction: column; }
+            .art-img-box { height: 40vh; }
+            .art-overlay-text { width: 90%; padding: 30px; }
+            .coupon-container { flex-direction: column; align-items: center; }
+            .social-grid { grid-template-columns: repeat(2, 1fr); }
+            h1 { font-size: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">Wynn Oasis</div>
+        <div class="nav-links">
+            <span>Exhibitions</span>
+            <span>Events</span>
+            <span>Dining</span>
+            <span>Map</span>
+        </div>
+    </nav>
+
+    <section id="hero" class="section">
+        <video autoplay muted loop playsinline>
+            <source src="grok-video-30f9221e-9cb9-4233-b566-a00c79dfcf64 (1).mp4" type="video/mp4">
+        </video>
+        <div class="overlay"></div>
+        <div class="content">
+            <p style="letter-spacing: 4px; margin-bottom: 20px;">A NEW CHAPTER</p>
+            <h1 style="font-size: 4rem; margin-bottom: 20px;">Inclusive Luxury</h1>
+            <a href="#outer" class="btn-outline">Explore The Oasis</a>
+        </div>
+    </section>
+
+    <section id="outer" class="section">
+        <div class="overlay"></div>
+        <div class="content">
+            <h2 style="font-size: 3rem; margin-bottom: 10px;">The Outer Circle</h2>
+            <p style="font-size: 1.2rem; opacity: 0.9;">Your Urban Living Room. Free Public Access.</p>
+        </div>
+    </section>
+
+    <div id="art-section">
+        <div class="art-img-box">
+            <img src="57d79adfec1ca592b519ba587b2e4ef3.jpg" alt="Floral Poster">
+        </div>
+        <div class="art-img-box">
+            <img src="c1e676dd275d062df0a39e1bff5a71f0.jpg" alt="Circle Installation">
+        </div>
+        
+        <div class="art-overlay-text">
+            <span style="font-size: 0.8rem; letter-spacing: 2px; color: #888; text-transform: uppercase;">Now Showing</span>
+            <h2 style="font-size: 2.2rem; margin: 15px 0 20px;">Oasis Art Exhibition</h2>
+            <p style="font-size: 0.95rem; line-height: 1.6; margin-bottom: 20px; color: #444;">
+                Immerse yourself in a world where nature meets creativity. 
+                Featuring large-scale installations and a "Floral Journey" designed to inspire.
+            </p>
+            <a href="#" style="color: #000; text-transform: uppercase; font-size: 0.7rem; letter-spacing: 2px; border-bottom: 1px solid #000; text-decoration: none;">View Gallery Guide</a>
+        </div>
+    </div>
+
+    <div class="events-bg">
+        <h2 style="color: #D4AF37; margin-bottom: 20px;">What's On</h2>
+        <p style="color: #888; margin-bottom: 40px;">Curated events for every weekend.</p>
+        
+        <div class="events-scroller">
+            <div class="event-card">
+                <span style="color: #D4AF37; font-size: 0.8rem;">FRI, OCT 28</span>
+                <h3 style="margin: 10px 0;">Jazz on the Lawn</h3>
+                <p style="font-size: 0.9rem; color: #aaa;">Live performance under the stars.</p>
+            </div>
+            <div class="event-card">
+                <span style="color: #D4AF37; font-size: 0.8rem;">SAT, OCT 29</span>
+                <h3 style="margin: 10px 0;">Floral Workshop</h3>
+                <p style="font-size: 0.9rem; color: #aaa;">Masterclass with top florists.</p>
+            </div>
+            <div class="event-card">
+                <span style="color: #D4AF37; font-size: 0.8rem;">LIMITED TIME</span>
+                <h3 style="margin: 10px 0;">IP Pop-Up Store</h3>
+                <p style="font-size: 0.9rem; color: #aaa;">Exclusive merchandise & photo ops.</p>
+            </div>
+        </div>
+    </div>
+
+    <section id="inner" class="section">
+        <div class="overlay-dark"></div>
+        <div class="content">
+            <h2 style="font-size: 3rem;">The Inner Circle</h2>
+            <p style="font-size: 1.2rem; margin-bottom: 30px;">A Social Solitude. Cinema & Dining.</p>
+            <a href="#" class="btn-outline">See Movie Schedule</a>
+        </div>
+    </section>
+
+    <section id="dining" class="section">
+        <div class="overlay"></div>
+        <div class="content">
+            <div class="menu-glass">
+                <h3 style="font-size: 2rem; margin-bottom: 30px; color: #D4AF37; text-align: center;">Curated Tastes</h3>
+                <div style="border-bottom: 1px solid rgba(255,255,255,0.2); padding: 15px 0;">
+                    <span>Signature Oasis Latte</span>
+                    <span class="price-highlight">MOP 38</span>
+                </div>
+                <div style="border-bottom: 1px solid rgba(255,255,255,0.2); padding: 15px 0;">
+                    <span>Artisan Portuguese Tart</span>
+                    <span class="price-highlight">MOP 38</span>
+                </div>
+                <div style="border-bottom: 1px solid rgba(255,255,255,0.2); padding: 15px 0;">
+                    <span>Mini Mousse Delight</span>
+                    <span class="price-highlight">MOP 48</span>
+                </div>
+                <div style="padding: 15px 0;">
+                    <span>Date Night Package (For 2)</span>
+                    <span class="price-highlight">MOP 148</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="privilege-section">
+        <h2>Exclusive Privileges</h2>
+        <div class="coupon-container">
+            <div class="coupon">
+                <div class="c-left">
+                    <span style="font-size: 0.7rem; letter-spacing: 2px;">NEW VISITOR</span>
+                    <h3 style="font-size: 2rem; font-family: 'Montserrat';">MOP 50</h3>
+                    <span style="font-size: 0.8rem;">Dining Voucher</span>
+                </div>
+                <div class="c-right">CLAIM</div>
+            </div>
+            <div class="coupon" style="background: #fff; color: #000;">
+                <div class="c-left">
+                    <span style="font-size: 0.7rem; letter-spacing: 2px; color: #D4AF37;">MEMBER</span>
+                    <h3 style="font-size: 2rem; font-family: 'Montserrat';">10% OFF</h3>
+                    <span style="font-size: 0.8rem;">Storewide Discount</span>
+                </div>
+                <div class="c-right" style="background: #eee;">JOIN</div>
+            </div>
+        </div>
+    </div>
+
+    <section id="footer-bg" class="section">
+        <div class="overlay-dark"></div>
+        <div class="content" style="width: 100%;">
+            
+            <h3 style="margin-bottom: 30px;">#WynnMoments</h3>
+            <div class="social-grid">
+                <div class="s-img"><img src="57d79adfec1ca592b519ba587b2e4ef3.jpg"></div>
+                <div class="s-img"><img src="dbd264890d222198b11c5bb7ccac5970.jpg"></div>
+                <div class="s-img"><img src="c1e676dd275d062df0a39e1bff5a71f0.jpg"></div>
+                <div class="s-img"><img src="4d78a3f7fb7fd71d9180eac6743a6c43.png"></div>
+            </div>
+
+            <div class="map-box">
+                <h3 style="font-size: 1.8rem; margin-bottom: 10px;">Find Your Way</h3>
+                <p style="color: #666; margin-bottom: 20px;">South Entrance Lawn, Wynn Palace</p>
+                <div style="border-top: 1px solid #ddd; width: 50px; margin: 0 auto 30px;"></div>
+                <div style="display: flex; justify-content: space-around; font-size: 0.8rem; text-transform: uppercase;">
+                    <div><i class="fas fa-bus"></i> Shuttle</div>
+                    <div><i class="fas fa-train"></i> Light Rail</div>
+                    <div><i class="fas fa-parking"></i> Parking</div>
+                </div>
+            </div>
+
+            <p style="margin-top: 60px; font-size: 0.7rem; opacity: 0.5;">© 2025 WYNN OASIS. ALL RIGHTS RESERVED.</p>
+        </div>
+    </section>
+
+</body>
+</html>
